@@ -14,7 +14,7 @@
 	<name>Intro-to-Devops-Assignment</name>
 	<description>Intro to Devops Assignment</description>
 	<properties>
-		<java.version>1.17</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
