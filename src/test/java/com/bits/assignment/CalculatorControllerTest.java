@@ -4,6 +4,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,32 +15,38 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CalculatorControllerTest {
+class CalculatorControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@Test
-	public void addTest() throws Exception {
+	void addTest() throws Exception {
 		this.mockMvc.perform(get("/add/1/2")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string("3"));
 	}
 
 	@Test
-	public void subTest() throws Exception {
+	void subTest() throws Exception {
 		this.mockMvc.perform(get("/sub/1/2")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string("-1"));
 	}
 
 	@Test
-	public void multiplyTest() throws Exception {
+	void multiplyTest() throws Exception {
 		this.mockMvc.perform(get("/multiply/1/2")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string("2"));
 	}
 
 	@Test
-	public void divideTest() throws Exception {
+	void divideTest() throws Exception {
 		this.mockMvc.perform(get("/divide/1/2")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string("0.5"));
+	}
+
+	@Test
+	void divideByZeroTest() throws Exception {
+		this.mockMvc.perform(get("/divide/1/0")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string("Divisor cannot be 0"));
 	}
 }
