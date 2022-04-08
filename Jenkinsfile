@@ -23,7 +23,10 @@ pipeline {
         }
         stage('Static Code Analysis') {
             steps {
-                echo 'Static Code Analysis Using SonarQube'
+                withMaven {
+                    // bat "mvn sonar:sonar -Dsonar.login=fab8e39c40eef5158e429a6fa80bf7708cb9976a -Dsonar.branch.name='$env.BRANCH_NAME'"
+                    bat "mvn sonar:sonar -Dsonar.login=fab8e39c40eef5158e429a6fa80bf7708cb9976a"
+                }
             }
         }
         stage('Deploy To Staging Environment') {
