@@ -11,12 +11,12 @@
 	</parent>
 	<groupId>com.bits.assignment</groupId>
 	<artifactId>Intro-to-Devops-Assignment</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>Intro-to-Devops-Assignment</name>
 	<description>Intro to Devops Assignment</description>
 
 	<properties>
-		<java.version>17</java.version>
+		<java.version>11</java.version>
 		<project.test.result.directory>${project.build.directory}/test-results</project.test.result.directory>
 		<sonar.host.url>http://localhost:9000</sonar.host.url>
 		<sonar.scm.provider>git</sonar.scm.provider>
