@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.bits.assignment</groupId>
 	<artifactId>Intro-to-Devops-Assignment</artifactId>
-	<version>1</version>
+	<version>1.0</version>
 	<name>Intro-to-Devops-Assignment</name>
 	<description>Intro to Devops Assignment</description>
 
