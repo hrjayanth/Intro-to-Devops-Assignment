@@ -19,6 +19,12 @@ class CalculatorControllerTest {
 	private MockMvc mockMvc;
 
 	@Test
+	void Test() throws Exception {
+		this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string("Working!!"));
+	}
+
+	@Test
 	void addTest() throws Exception {
 		this.mockMvc.perform(get("/add/1/2")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string("3"));
