@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CalculatorController {
 
+	@GetMapping("/")
+	public ResponseEntity<String> test() {
+		return ResponseEntity.ok("Working!!");
+	}
+	
 	@GetMapping("/add/{a}/{b}")
 	public ResponseEntity<Integer> add(@PathVariable Integer a, @PathVariable Integer b) {
 		int sum = a + b;
