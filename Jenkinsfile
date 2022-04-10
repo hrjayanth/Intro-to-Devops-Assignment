@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('AWS_SECRET_ACCESS_KEY')
-        AWS_SECRET_ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
+        AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
 		ARTIFACT_NAME = 'Intro-to-Devops-Assignment.jar'
         AWS_S3_BUCKET = 'intro-to-devops-assignment-bucket'
         AWS_EB_APP_NAME = '	Intro-to-Devops-Assignment'
@@ -33,10 +33,11 @@ pipeline {
         }
         stage('Static Code Analysis') {
             steps {
-                withMaven {
+            	echo 'Skipping static code analysis'
+                // withMaven {
                     // bat "mvn sonar:sonar -Dsonar.login=fab8e39c40eef5158e429a6fa80bf7708cb9976a -Dsonar.branch.name='$env.BRANCH_NAME'"
-                    bat "mvn sonar:sonar -Dsonar.login=fab8e39c40eef5158e429a6fa80bf7708cb9976a"
-                }
+                    // bat "mvn sonar:sonar -Dsonar.login=fab8e39c40eef5158e429a6fa80bf7708cb9976a"
+                // }
             }
         }
         stage('Upload Artifact') {
