@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+        AWS_ACCESS_KEY_ID     = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_ACCESS_KEY_ID')
 		ARTIFACT_NAME = 'Intro-to-Devops-Assignment.jar'
         AWS_S3_BUCKET = 'intro-to-devops-assignment-bucket'
         AWS_EB_APP_NAME = '	Intro-to-Devops-Assignment'
