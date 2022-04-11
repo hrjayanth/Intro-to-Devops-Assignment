@@ -51,6 +51,8 @@ pipeline {
         stage('Deploy to Test Environment') {
             steps {
                 echo 'Deploy to Staging Environment Works!!'
+            	bat 'printenv'
+            	echo "BuildID: ${BUILD_ID}"
                 echo 'BuildNumber: $AWS_EB_APP_VERSION'
                 echo 'BuildNumber: ${AWS_EB_APP_VERSION}'
                 echo 'BuildID: ${BUILD_ID}'
