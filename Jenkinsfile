@@ -64,5 +64,13 @@ pipeline {
                 bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_PROD_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}"
             }
         }
+        post {
+        	failure {
+        		bat "mail bcc: '', body: '', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'hrjayanth@gmail.com'"
+        	}
+        	always { 
+            	echo "This always gets called"
+        	}
+    	}
     }
 }
