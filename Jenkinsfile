@@ -36,35 +36,35 @@ pipeline {
             }
         }
         stage('Upload Artifact') {
-            // when {
-            //     branch 'main'
-            // }
+            when {
+                branch 'main'
+            }
             steps {
                 bat 'aws configure set region ap-south-1'
                 bat 'aws s3 cp ./target/Intro-to-Devops-Assignment-1.0.jar s3://intro-to-devops-assignment-bucket/Intro-to-Devops-Assignment.jar'
             }
         }
         stage('Deploy to Test Environment') {
-        	// when {
-            //     branch 'main'
-            // }
+        	when {
+                branch 'main'
+            }
             steps {
 				bat "aws elasticbeanstalk create-application-version --application-name ${AWS_EB_APP_NAME} --version-label ${AWS_EB_APP_VERSION} --source-bundle S3Bucket=${AWS_S3_BUCKET},S3Key=${ARTIFACT_NAME}"
                 bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_TEST_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}"
             }
         }
         stage('Regression Testing') {
-        	// when {
-            //     branch 'main'
-            // }
+        	when {
+                branch 'main'
+            }
         	steps {
-        		echo 'Regresssion Testing using Selenium or anyother regression testing suits'
+        		echo 'Regresssion Testing using Selenium or any other regression testing suit in Test Environment'
         	}
         }
         stage('Deploy To Production Environment') {
-        	// when {
-            //     branch 'main'
-            // }
+        	when {
+                branch 'main'
+            }
             steps {
                 echo 'Deploy to Production Environment Works!!'
                 bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_PROD_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}"
