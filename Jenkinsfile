@@ -60,7 +60,7 @@ pipeline {
                 echo 'App Name: $AWS_EB_APP_NAME'
 				
 				bat "aws elasticbeanstalk create-application-version --application-name ${AWS_EB_APP_NAME} --version-label ${AWS_EB_APP_VERSION} --source-bundle S3Bucket=${AWS_S3_BUCKET},S3Key=${ARTIFACT_NAME}"
-                bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}'
+                bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}"
                 // bat 'aws elasticbeanstalk create-application-version --application-name Intro-to-Devops-Assignment --version-label 1.3 --source-bundle S3Bucket=intro-to-devops-assignment-bucket,S3Key=Intro-to-Devops-Assignment.jar'
 				// bat 'aws elasticbeanstalk update-environment --application-name Intro-to-Devops-Assignment --environment-name Introtodevopsassignment-test-env --version-label 1.3'                
             }
