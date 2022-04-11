@@ -6,7 +6,7 @@ pipeline {
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
 		ARTIFACT_NAME = 'Intro-to-Devops-Assignment.jar'
         AWS_S3_BUCKET = 'intro-to-devops-assignment-bucket'
-        AWS_EB_APP_NAME = '	Intro-to-Devops-Assignment'
+        AWS_EB_APP_NAME = 'Intro-to-Devops-Assignment'
         AWS_EB_ENVIRONMENT = 'Introtodevopsassignment-test-env'
         AWS_EB_APP_VERSION = "${BUILD_ID}"
     }
