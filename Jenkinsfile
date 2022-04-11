@@ -8,7 +8,7 @@ pipeline {
         AWS_S3_BUCKET = 'intro-to-devops-assignment-bucket'
         AWS_EB_APP_NAME = 'Intro-to-Devops-Assignment'
         AWS_EB_ENVIRONMENT = 'Introtodevopsassignment-test-env'
-        AWS_EB_APP_VERSION = '1.3'
+        AWS_EB_APP_VERSION = "${BUILD_ID}"
     }
 
     stages {
@@ -55,14 +55,14 @@ pipeline {
                 echo 'Deploy to Staging Environment Works!!'
             	echo "BuildID: ${BUILD_ID}"
                 echo 'BuildNumber: $AWS_EB_APP_VERSION'
-                echo 'BuildNumber: ${AWS_EB_APP_VERSION}'
+                echo "BuildNumber: ${AWS_EB_APP_VERSION}"
                 echo 'BuildID: ${BUILD_ID}'
                 echo 'App Name: $AWS_EB_APP_NAME'
 				
-				// bat 'aws elasticbeanstalk create-application-version --application-name $AWS_EB_APP_NAME --version-label $AWS_EB_APP_VERSION --source-bundle S3Bucket=$AWS_S3_BUCKET,S3Key=$ARTIFACT_NAME'
-                // bat 'aws elasticbeanstalk update-environment --application-name $AWS_EB_APP_NAME --environment-name $AWS_EB_ENVIRONMENT --version-label $AWS_EB_APP_VERSION'
-                bat 'aws elasticbeanstalk create-application-version --application-name Intro-to-Devops-Assignment --version-label 1.3 --source-bundle S3Bucket=intro-to-devops-assignment-bucket,S3Key=Intro-to-Devops-Assignment.jar'
-				bat 'aws elasticbeanstalk update-environment --application-name Intro-to-Devops-Assignment --environment-name Introtodevopsassignment-test-env --version-label 1.3'                
+				bat "aws elasticbeanstalk create-application-version --application-name ${AWS_EB_APP_NAME} --version-label ${AWS_EB_APP_VERSION} --source-bundle S3Bucket=${AWS_S3_BUCKET},S3Key=${ARTIFACT_NAME}"
+                bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}'
+                // bat 'aws elasticbeanstalk create-application-version --application-name Intro-to-Devops-Assignment --version-label 1.3 --source-bundle S3Bucket=intro-to-devops-assignment-bucket,S3Key=Intro-to-Devops-Assignment.jar'
+				// bat 'aws elasticbeanstalk update-environment --application-name Intro-to-Devops-Assignment --environment-name Introtodevopsassignment-test-env --version-label 1.3'                
             }
         }
         stage('Deploy To Production Environment') {
