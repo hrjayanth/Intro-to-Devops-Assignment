@@ -8,7 +8,8 @@ pipeline {
 		ARTIFACT_NAME 			= 'Intro-to-Devops-Assignment.jar'
         AWS_S3_BUCKET 			= 'intro-to-devops-assignment-bucket'
         AWS_EB_APP_NAME 		= 'Intro-to-Devops-Assignment'
-        AWS_EB_ENVIRONMENT 		= 'Introtodevopsassignment-test-env'
+        AWS_EB_TEST_ENVIRONMENT = 'Introtodevopsassignment-test-env'
+        AWS_EB_PROD_ENVIRONMENT = 'Introtodevopsassignment-prod-env'
         AWS_EB_APP_VERSION 		= "${BUILD_ID}"
     }
 
@@ -35,7 +36,7 @@ pipeline {
         stage('Static Code Analysis') {
             steps {
                 withMaven {
-                    bat "mvn sonar:sonar -Dsonar.login=fab8e39c40eef5158e429a6fa80bf7708cb9976a -Dsonar.branch.name='$env.BRANCH_NAME'"
+                    // bat "mvn sonar:sonar -Dsonar.login=fab8e39c40eef5158e429a6fa80bf7708cb9976a -Dsonar.branch.name='$env.BRANCH_NAME'"
                     bat "mvn sonar:sonar -Dsonar.login=${SONARQUBE_LOGIN_ID}"
                 }
             }
@@ -49,7 +50,7 @@ pipeline {
         stage('Deploy to Test Environment') {
             steps {
 				bat "aws elasticbeanstalk create-application-version --application-name ${AWS_EB_APP_NAME} --version-label ${AWS_EB_APP_VERSION} --source-bundle S3Bucket=${AWS_S3_BUCKET},S3Key=${ARTIFACT_NAME}"
-                bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}"
+                bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_TEST_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}"
             }
         }
         stage('Regression Testing') {
@@ -60,6 +61,7 @@ pipeline {
         stage('Deploy To Production Environment') {
             steps {
                 echo 'Deploy to Production Environment Works!!'
+                bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_PROD_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}"
             }
         }
     }
