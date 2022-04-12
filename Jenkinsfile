@@ -2,21 +2,20 @@ pipeline {
     agent any
 
     environment {
-    	SONARQUBE_LOGIN_ID 		= credentials('SONARQUBE_LOGIN_ID')
-        AWS_ACCESS_KEY_ID     	= credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY 	= credentials('AWS_SECRET_ACCESS_KEY')
+		SONARQUBE_LOGIN_ID 		= credentials('SONARQUBE_LOGIN_ID')
+		AWS_ACCESS_KEY_ID     	= credentials('AWS_ACCESS_KEY_ID')
+		AWS_SECRET_ACCESS_KEY 	= credentials('AWS_SECRET_ACCESS_KEY')
 		ARTIFACT_NAME 			= 'Intro-to-Devops-Assignment.jar'
-        AWS_S3_BUCKET 			= 'intro-to-devops-assignment-bucket'
-        AWS_EB_APP_NAME 		= 'Intro-to-Devops-Assignment'
-        AWS_EB_TEST_ENVIRONMENT = 'Introtodevopsassignment-test-env'
-        AWS_EB_PROD_ENVIRONMENT = 'Introtodevopsassignment-prod-env'
-        AWS_EB_APP_VERSION 		= "${BUILD_ID}"
+		AWS_S3_BUCKET 			= 'intro-to-devops-assignment-bucket'
+		AWS_EB_APP_NAME 		= 'Intro-to-Devops-Assignment'
+		AWS_EB_TEST_ENVIRONMENT = 'Introtodevopsassignment-test-env'
+		AWS_EB_PROD_ENVIRONMENT = 'Introtodevopsassignment-prod-env'
+		AWS_EB_APP_VERSION 		= "${BUILD_ID}"
     }
 
     stages {
-        stage('Build') {
+        stage('Build and Unit Testing') {
             steps {
-                echo 'Build and Unit Testing!!'
                 withMaven {
                     bat "mvn clean package"
                 }
@@ -70,13 +69,14 @@ pipeline {
                 bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_PROD_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}"
             }
         }
-        // post {
-        	// failure {
-        		// bat "mail bcc: '', body: '', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'hrjayanth@gmail.com'"
-        	// }
-        	// always { 
-            //	echo "This always gets called"
-        	// }
-    	// }
-    }
+	}
+	post {
+		failure {
+			echo "This gets called only when there is a failure"
+			// bat "mail bcc: '', body: '', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'hrjayanth@gmail.com'"
+		}
+		always { 
+            echo "This always gets called"
+		}
+	}
 }
