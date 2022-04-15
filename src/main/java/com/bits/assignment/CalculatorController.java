@@ -10,7 +10,7 @@ public class CalculatorController {
 
 	@GetMapping("/")
 	public ResponseEntity<String> test() {
-		return ResponseEntity.ok("Working!!");
+		return ResponseEntity.ok("Greetings, new version has been successfully deployed!!");
 	}
 	
 	@GetMapping("/add/{a}/{b}")
