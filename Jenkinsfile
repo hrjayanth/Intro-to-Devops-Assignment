@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     environment {
-		SONARQUBE_LOGIN_ID 		= credentials('SONARQUBE_LOGIN_ID')
+		SONARQUBE_LOGIN_ID	= credentials('SONARQUBE_LOGIN_ID')
 		AWS_ACCESS_KEY_ID     	= credentials('AWS_ACCESS_KEY_ID')
 		AWS_SECRET_ACCESS_KEY 	= credentials('AWS_SECRET_ACCESS_KEY')
-		ARTIFACT_NAME 			= 'Intro-to-Devops-Assignment.jar'
-		AWS_S3_BUCKET 			= 'intro-to-devops-assignment-bucket'
-		AWS_EB_APP_NAME 		= 'Intro-to-Devops-Assignment'
+		ARTIFACT_NAME 		= 'Intro-to-Devops-Assignment.jar'
+		AWS_S3_BUCKET 		= 'intro-to-devops-assignment-bucket'
+		AWS_EB_APP_NAME 	= 'Intro-to-Devops-Assignment'
 		AWS_EB_TEST_ENVIRONMENT = 'Introtodevopsassignment-test-env'
 		AWS_EB_PROD_ENVIRONMENT = 'Introtodevopsassignment-prod-env'
-		AWS_EB_APP_VERSION 		= "${BUILD_ID}"
+		AWS_EB_APP_VERSION	= "${BUILD_ID}"
     }
 
     stages {
@@ -28,10 +28,13 @@ pipeline {
         }
         stage('Static Code Analysis') {
             steps {
-                withMaven {
-                    // bat "mvn sonar:sonar -Dsonar.login=fab8e39c40eef5158e429a6fa80bf7708cb9976a -Dsonar.branch.name='$env.BRANCH_NAME'"
-                    bat "mvn sonar:sonar -Dsonar.login=${SONARQUBE_LOGIN_ID}"
-                }
+                try {
+			withMaven {
+                    		bat "mvn sonar:sonar -Dsonar.login=${SONARQUBE_LOGIN_ID}"
+                	}           
+		} catch (err) {
+			echo err.getMessage()
+		}
             }
         }
         stage('Upload Artifact') {
@@ -44,24 +47,24 @@ pipeline {
             }
         }
         stage('Deploy to Test Environment') {
-        	when {
-                branch 'main'
+	    when {
+		branch 'main'
             }
             steps {
-				bat "aws elasticbeanstalk create-application-version --application-name ${AWS_EB_APP_NAME} --version-label ${AWS_EB_APP_VERSION} --source-bundle S3Bucket=${AWS_S3_BUCKET},S3Key=${ARTIFACT_NAME}"
+		bat "aws elasticbeanstalk create-application-version --application-name ${AWS_EB_APP_NAME} --version-label ${AWS_EB_APP_VERSION} --source-bundle S3Bucket=${AWS_S3_BUCKET},S3Key=${ARTIFACT_NAME}"
                 bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_TEST_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}"
             }
         }
         stage('Regression Testing') {
-        	when {
+            when {
                 branch 'main'
             }
-        	steps {
-        		echo 'Regresssion Testing using Selenium or any other regression testing suit in Test Environment'
-        	}
+            steps {
+        	echo 'Regresssion Testing using Selenium or any other regression testing suit in Test Environment'
+            }
         }
         stage('Deploy To Production Environment') {
-        	when {
+            when {
                 branch 'main'
             }
             steps {
@@ -69,14 +72,14 @@ pipeline {
                 bat "aws elasticbeanstalk update-environment --application-name ${AWS_EB_APP_NAME} --environment-name ${AWS_EB_PROD_ENVIRONMENT} --version-label ${AWS_EB_APP_VERSION}"
             }
         }
-	}
-	post {
-		failure {
-			echo "This gets called only when there is a failure"
-			// bat "mail bcc: '', body: '', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'hrjayanth@gmail.com'"
-		}
-		always { 
+    }
+    post {
+	failure {
+    	    echo "This gets called only when there is a failure"
+	    // bat "mail bcc: '', body: '', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'hrjayanth@gmail.com'"
+	    }
+	always { 
             echo "This always gets called"
-		}
 	}
+    }
 }
