@@ -21,7 +21,7 @@ class CalculatorControllerTest {
 	@Test
 	void Test() throws Exception {
 		this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string("Working!!"));
+				.andExpect(content().string("Greetings, new version has been successfully deployed into Production environment!!"));
 	}
 
 	@Test
