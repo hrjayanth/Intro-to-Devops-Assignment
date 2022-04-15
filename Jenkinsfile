@@ -28,13 +28,9 @@ pipeline {
         }
         stage('Static Code Analysis') {
             steps {
-                try {
-			withMaven {
-                    		bat "mvn sonar:sonar -Dsonar.login=${SONARQUBE_LOGIN_ID}"
-                	}           
-		} catch (err) {
-			echo err.getMessage()
-		}
+                withMaven {
+                    bat "mvn sonar:sonar -Dsonar.login=${SONARQUBE_LOGIN_ID}"
+                }           
             }
         }
         stage('Upload Artifact') {
